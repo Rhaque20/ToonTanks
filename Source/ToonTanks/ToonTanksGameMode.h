@@ -19,6 +19,9 @@ class TOONTANKS_API AToonTanksGameMode : public AGameModeBase
 	protected:
 		virtual void BeginPlay() override;
 		
+		UFUNCTION(BlueprintImplementableEvent)
+		void StartGame();
+		
 	private:
 		class ATank *Tank;
 		class AToonTanksPlayerController *ToonTanksPlayerController;
