@@ -28,6 +28,10 @@ ABasePawn::ABasePawn()
 
 void ABasePawn::HandleDestruction()
 {
+	if(DeathCameraShakeClass)
+	{
+		GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(DeathCameraShakeClass);
+	}
 	if(DeathSound)
 		UGameplayStatics::PlaySoundAtLocation(this,DeathSound,GetActorLocation());
 	if (DeathParticles)
