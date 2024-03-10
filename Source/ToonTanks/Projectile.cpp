@@ -6,6 +6,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/DamageType.h"
+#include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -16,6 +17,8 @@ AProjectile::AProjectile()
 	RootComponent = ProjectileMesh;
 
 	ProjectileMoveComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Projectile Move Component"));
+	SmokeTrail = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Smoke Trail"));
+	SmokeTrail->SetupAttachment(RootComponent);
 
 }
 
@@ -37,7 +40,11 @@ void AProjectile::OnHit(UPrimitiveComponent *HitComp, AActor *OtherActor, UPrimi
 	auto MyOwner = GetOwner();
 
 	if(MyOwner == nullptr)
+	{
+		Destroy();
 		return;
+	}
+		
 	
 	auto MyOwnerInstigator = MyOwner->GetInstigatorController();
 	auto DamageTypeClass = UDamageType::StaticClass();
@@ -45,26 +52,12 @@ void AProjectile::OnHit(UPrimitiveComponent *HitComp, AActor *OtherActor, UPrimi
 	if(OtherActor != nullptr && OtherActor != this && OtherActor != MyOwner)
 	{
 		UGameplayStatics::ApplyDamage(OtherActor,Damage,MyOwnerInstigator,this,DamageTypeClass);
-		Destroy();
+		if (HitParticles)
+			UGameplayStatics::SpawnEmitterAtLocation(this,HitParticles,GetActorLocation(),GetActorRotation());
+		
 	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("Contact failed:"));
-		if(OtherActor == nullptr)
-		{
-			UE_LOG(LogTemp, Error, TEXT("OtherActor is null"));
-		}
 
-		if (OtherActor == this)
-		{
-			UE_LOG(LogTemp, Error, TEXT("OtherActor is itself"));
-		}
-
-		if(OtherActor == MyOwner)
-		{
-			UE_LOG(LogTemp, Error, TEXT("OtherActor is the original owner"));
-		}
-	}
+	Destroy();
 	
 }
 
