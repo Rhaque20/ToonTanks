@@ -17,8 +17,12 @@ AProjectile::AProjectile()
 	RootComponent = ProjectileMesh;
 
 	ProjectileMoveComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Projectile Move Component"));
-	SmokeTrail = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Smoke Trail"));
-	SmokeTrail->SetupAttachment(RootComponent);
+	if (SmokeTrail)
+	{
+		SmokeTrail = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Smoke Trail"));
+		SmokeTrail->SetupAttachment(RootComponent);
+	}
+	
 
 }
 
