@@ -15,6 +15,8 @@ class TOONTANKS_API ATank : public ABasePawn
 	GENERATED_BODY()
 
 	public:
+		bool bAlive = true;
+
 		ATank();
 		virtual void Tick(float DeltaTime) override;
 		void HandleDestruction();

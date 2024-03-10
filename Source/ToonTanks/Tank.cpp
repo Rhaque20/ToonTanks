@@ -22,6 +22,7 @@ void ATank::HandleDestruction()
 {
     SetActorHiddenInGame(true);
     SetActorTickEnabled(false);
+    bAlive = false;
 }
 
 void ATank::Tick(float DeltaTime)
@@ -61,23 +62,6 @@ void ATank::Turn(float Value)
 
     AddActorLocalRotation(DeltaRotation * DeltaTime * TurnRate,true);
 }
-
-// void ATank::Fire()
-// {
-//     if(PlayerControllerRef)
-//     {
-//         FHitResult HitResult;
-//         PlayerControllerRef->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility,false,HitResult);
-
-//         DrawDebugSphere(GetWorld(),
-//         HitResult.ImpactPoint,
-//         25.f,
-//         12,
-//         FColor::Blue,
-//         false,
-//         5.0f);
-//     }
-// }
 
 // Called to bind functionality to input
 void ATank::SetupPlayerInputComponent(UInputComponent *PlayerInputComponent)
